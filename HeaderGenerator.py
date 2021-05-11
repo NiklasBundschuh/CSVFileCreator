@@ -60,6 +60,8 @@ class HeaderGenerator:
         i = 0
         p = 0
         l = []
+        test= []
+        idx = 0
         if keys[idx] == "S0":
             dataSIdx = 32
             lastIdxS = 0
@@ -74,16 +76,16 @@ class HeaderGenerator:
             hh.append(headerS[lastIdxS:dataSIdx])
             l.append(headerSValues[lastIdxS:dataSIdx])
             for e in hh[inputIdx]:
-                headerLines.append(hh[inputIdx][i])
+                test.append(hh[inputIdx][i])
+                
                 i += 1
-            
             for q in l[inputIdx]:
-                headerLines.append(l[inputIdx][p])
+                test.append(l[inputIdx][p])
                 p += 1
             inputIdx += 1
             lastIdxK += 32
             dataSIdx += 32
-        print(headerLines)   
+        print(test)   
 
             
             
