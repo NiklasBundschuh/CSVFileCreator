@@ -18,14 +18,18 @@ class HeaderGenerator:
         headerK = []
         headerS = []
         headerStartValues = []
-        headerKValues = []
-        headerSValues = []
+        headerValuesK = []
+        headerValuesS = []
 
         for i in headerDict.values():
             values.append(i)
         for e in headerDict.keys():
             keys.append(e)
         # generate common sedction
+
+
+
+
         while keys[idx] != 'K01':
             startIdx = 1
             headerStartData.append(keys[idx])
@@ -37,125 +41,162 @@ class HeaderGenerator:
             headerLines.append(headerStartValues[startIdx])
             startIdx += 1
 
-        #headerLines += generateCommonSection(headerDict)
+       
 
         # generate K section
+        keyCacheK = []
+        valueCacheK = []
+        lastIdxK = 0
+        dataIdxK = 32
+        inputIdxK = 0
         if keys[idx] == 'K01':
-            dataKIdx = 32
-            lastIdxK = 0
-        while keys[idx] != "S0":
-            headerK.append(keys[idx])
-            headerKValues.append(values[idx])
-            idx += 1
-        while len(headerK) >= dataKIdx:
-            headerLines.append(headerK[lastIdxK:dataKIdx])
-            headerLines.append(headerKValues[lastIdxK:dataKIdx])
-            dataKIdx += 32
-            lastIdxK += 32
-
+            while keys[idx] != "S0":
+                headerK.append(keys[idx])
+                headerValuesK.append(values[idx])
+                idx += 1
+            while len(headerK) >= dataIdxK:
+                keyCacheK.append(headerK[lastIdxK:dataIdxK])
+                valueCacheK.append(headerValuesK[lastIdxK:dataIdxK])
+                dataIdxK += 32
+                lastIdxK += 32
+            while inputIdxK != 2:
+                i = 0
+                p = 0
+                for e in keyCacheK[inputIdxK]:
+                    headerLines.append(keyCacheK[inputIdxK][i]) 
+                    i += 1
+                for q in valueCacheK[inputIdxK]:
+                    headerLines.append(valueCacheK[inputIdxK][p])
+                    p += 1
+                inputIdxK += 1
+        print(headerLines)
         #headerLines += generateKArraySection(headerDict)
 
         # generate S section
-        hh = []
-        i = 0
-        p = 0
-        l = []
-        test= []
-        idx = 0
+        keyCacheS = []
+        valuesChacheS = []
+        dataIdxS = 32
+        lastIdxS = 0
+        inputIdxS = 0
+
         if keys[idx] == "S0":
-            dataSIdx = 32
-            lastIdxS = 0
-            inputIdx = 0
-        while len(keys) >= idx:
-            headerS.append(keys[idx])
-            headerSValues.append(values[idx])
-            idx += 1
-            if idx == 520:
-                break
-        while len(headerS) >= dataSIdx:
-            hh.append(headerS[lastIdxS:dataSIdx])
-            l.append(headerSValues[lastIdxS:dataSIdx])
-            for e in hh[inputIdx]:
-                test.append(hh[inputIdx][i])
-                
-                i += 1
-            for q in l[inputIdx]:
-                test.append(l[inputIdx][p])
-                p += 1
-            inputIdx += 1
-            lastIdxK += 32
-            dataSIdx += 32
-        print(test)   
+            while len(keys) == 520:
+                headerS.append(keys[idx])
+                headerValuesS.append(values[idx])
+                idx += 1
+                if idx == 520:
+                    break
 
-            
-            
-            #hh.append(headerSValues[lastIdxS:dataSIdx])
-            #for e in hh[inputIdx]:
-                #headerLines.append(hh[inputIdx])
-                #inputIdx += 1
-            #inputIdx = 0
-            #dataSIdx += 1
-            #if dataSIdx == lastIdxS():
-                #dataSIdx += 32
-                #lastIdxS += 32
-        #headerLines += generateSArraySection(headerDict)
-        #print(headerLines)
-        
+            while len(headerS) >= dataIdxS:
+                keyCacheS.append(headerS[lastIdxS:dataIdxS])
+                valuesChacheS.append(headerValuesS[lastIdxS:dataIdxS])
+                lastIdxS += 33
+                dataIdxS += 32
+
+            while inputIdxS != 14:
+                i = 0
+                p = 0
+                for e in keyCacheS[inputIdxS]:
+                    headerLines.append(keyCacheS[inputIdxS][i]) 
+                    i += 1
+                for q in valuesChacheS[inputIdxS]:
+                    headerLines.append(valuesChacheS[inputIdxS][p])
+                    p += 1
+                inputIdxS += 1
+            print(headerLines)
+
         return headerLines
-#class FooterGenerator:
 
 
+class FooterGenerator:
+  
+    def generate(self, footerDict, footerLines):
+        keys = []
+        idx = 0
+        values = []
+        footerStartData = []
+        footerK = []
+        footerS = []
+        footerStartValues = []
+        footerValuesK = []
+        footerValuesS = []
 
-    
-def FooterGenerator(footerDict, FooterStart, FooterDataK, FooterDataS):
-    keys = []
-    idx = 0
-    values = []
-    FooterStartData = []
-    FooterK = []
-    FooterS = []
-    FooterStartValues = []
-    FooterKValues = []
-    FooterSValues = []
-
-    for i in footerDict.keys():
-        keys.append(i)
-    
-    for e in footerDict.values():
-        values.append(e)
-    
-    while keys[idx] != 'K01':
-        startIdx = 1
-        FooterStartData.append(keys[idx])
-        FooterStartValues.append(values[idx])
-        idx += 1
-
-    while len(FooterStartData) != startIdx:
-        FooterStart.append(FooterStartData[startIdx])
-        FooterStart.append(FooterStartValues[startIdx])
-        startIdx += 1
-
-    if keys[idx] == 'K01':
-        dataKIdx = 0
-        while keys[idx] != "S0":
-            FooterDataK.append(keys[idx] + values[idx])
-            idx += 1
-        while len(FooterK) >= dataKIdx:
-            FooterDataK.append(FooterK[:dataKIdx])
-            FooterDataK.append(FooterKValues[:dataKIdx])
-            dataKIdx += 32
+        for i in footerDict.keys():
+            keys.append(i)
         
-
-    if keys[idx] == "S0":
-        dataSIdx = 0
-        while len(keys) >= idx:
-            FooterDataS.append(keys[idx] + str(values[idx]))
-            idx += 1
-            if idx == 520:
-                break
-        while len(FooterS) >= dataKIdx:
-            FooterDataS.append(FooterS[:dataSIdx])
-            FooterDataS.append(FooterSValues[:dataSIdx])
-            dataSIdx += 32
+        for e in footerDict.values():
+            values.append(e)
         
-    return footerDict, FooterStart, FooterDataK, FooterDataS
+        while keys[idx] != 'K01':
+            startIdx = 1
+            footerStartData.append(keys[idx])
+            footerStartValues.append(values[idx])
+            idx += 1
+
+        while len(footerStartData) != startIdx:
+            footerLines.append(footerStartData[startIdx])
+            footerLines.append(footerStartValues[startIdx])
+            startIdx += 1
+
+        # generate K section
+
+        keyCacheK = []
+        valueCacheK = []
+        lastIdxK = 0
+        dataIdxK = 32
+        inputIdxK = 0
+        if keys[idx] == 'K01':
+            while keys[idx] != "S0":
+                footerK.append(keys[idx])
+                footerValuesK.append(values[idx])
+                idx += 1
+            while len(footerK) >= dataIdxK:
+                keyCacheK.append(footerK[lastIdxK:dataIdxK])
+                valueCacheK.append(footerValuesK[lastIdxK:dataIdxK])
+                dataIdxK += 32
+                lastIdxK += 32
+            while inputIdxK != 2:
+                i = 0
+                p = 0
+                for e in keyCacheK[inputIdxK]:
+                    footerLines.append(keyCacheK[inputIdxK][i]) 
+                    i += 1
+                for q in valueCacheK[inputIdxK]:
+                    footerLines.append(valueCacheK[inputIdxK][p])
+                    p += 1
+                inputIdxK += 1
+            
+        # generate S section
+        keyCacheS = []
+        valuesChacheS = []
+        dataIdxS = 32
+        lastIdxS = 0
+        inputIdxS = 0
+
+        if keys[idx] == "S0":
+            while len(keys) == 520:
+                footerS.append(keys[idx])
+                footerValuesS.append(values[idx])
+                idx += 1
+                if idx == 520:
+                    break
+
+            while len(footerS) >= dataIdxS:
+                keyCacheS.append(footerS[lastIdxS:dataIdxS])
+                valuesChacheS.append(footerValuesS[lastIdxS:dataIdxS])
+                lastIdxS += 33
+                dataIdxS += 32
+
+            while inputIdxS != 14:
+                i = 0
+                p = 0
+                for e in keyCacheS[inputIdxS]:
+                    footerLines.append(keyCacheS[inputIdxS][i]) 
+                    i += 1
+                for q in valuesChacheS[inputIdxS]:
+                    footerLines.append(valuesChacheS[inputIdxS][p])
+                    p += 1
+                inputIdxS += 1
+            print(footerLines)
+
+            return footerLines

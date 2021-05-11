@@ -5,11 +5,13 @@ import csv
 
 def CreateCSVFile(headerDict, footerDict, dataList): 
     headerLines = []
+    footerLines = []
     head = HeaderGenerator()
-    #foot = FooterGenerator()
+    foot = FooterGenerator()
     #data = DataGenerator(dataList,)
 
     head.generate(headerDict, headerLines) 
+    foot.generate(footerDict, footerLines)
     #writer.writerows([headerlines])
 
     #head.generate(footerDict)
