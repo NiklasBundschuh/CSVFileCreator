@@ -1,19 +1,23 @@
 from DataParser import DataParser
 
-def DataGenerator(dataList, DataCSV):
-    cache = []
-    rowIdx = 0
-    itemIdx = 0
-    while len(dataList) >= itemIdx:
-        if rowIdx == 128:
-            itemIdx += 1
-            rowIdx = 0
-        cache.append(dataList[rowIdx].data())
-        DataCSV.append(cache[0][itemIdx])
+
+class DataGenerator:
+    def generate(self, dataList):
+        dataLines = []
         cache = []
-        rowIdx += 1
-    return DataCSV, dataList
-    
+        rowIdx = 0
+        itemIdx = 0
+        while len(dataList) >= itemIdx:
+            if rowIdx == 128:
+                itemIdx += 1
+                rowIdx = 0
+            cache.append(dataList[rowIdx].data())
+            dataLines.append(cache[0][itemIdx])
+            cache = []
+            rowIdx += 1
+        print(dataLines)
+        return dataLines
+        
    
     
     

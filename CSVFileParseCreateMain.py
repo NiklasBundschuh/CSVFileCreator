@@ -1,6 +1,6 @@
-from CSVFileGenerator import CreateCSVFile
+from CSVFileGenerator import createCSVFile
 from DataGenerator import DataGenerator
-from HeaderGenerator import FooterGenerator, HeaderGenerator
+from HeaderGenerator import  HeaderGenerator
 from CSVFileParser import parseKeyValueFile
 
 def main():
@@ -11,7 +11,7 @@ def main():
     
    
     headerDict, footerDict, dataList = parseKeyValueFile('text_2DateiÖffnen.csv')
-    headerDict, footerDict, dataList= CreateCSVFile(headerDict, footerDict, dataList)
+    createCSVFile(headerDict, footerDict, dataList)
 
 if __name__ == '__main__':
     main()
