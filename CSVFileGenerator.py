@@ -8,25 +8,26 @@ def createCSVFile(headerDict, footerDict, dataList):
     head = HeaderGenerator()
     data = DataGenerator()
     
-    headerLines = head.header(headerDict) 
+    headerLines = head.generate(headerDict) 
     #footerLines = head.footer(footerDict)
     dataLines = data.generate(dataList)
 
-    with open ('CopiedCSV.csv', 'w', newline='') as copy:
-        writer = csv.writer(copy)
+    writer = open("CopiedCSV.csv", "w")
+    writeLine(writer, CSVFileSeparatorKeys.HEADER_START)
+    writer.writelines(headerLines)
+    writeLine(writer, CSVFileSeparatorKeys.HEADER_END)
 
-        writer.writerows(CSVFileSeparatorKeys.HEADER_START)
-        writer.writerows(headerLines)
-        writer.writerow(CSVFileSeparatorKeys.HEADER_END)
+    writeLine(writer, CSVFileSeparatorKeys.FOOTER_START)
+    #writer.writelines(footerLines)
+    writeLine(writer, CSVFileSeparatorKeys.FOOTER_END)
 
-        writer.writerow(CSVFileSeparatorKeys.FOOTER_START)
-        writer.writerows(footerLines)
-        writer.writerow(CSVFileSeparatorKeys.FOOTER_END)
+    #writer.writelines(dataLines)
 
-        writer.writerows(dataLines)
+    writer.close
 
-        copy.close
-
+def writeLine(writer, line):
+    writer.write(line + "\n")
+ 
 #-------------------------------------------
 #    i = []
 #    idx = 1
@@ -88,5 +89,5 @@ def createCSVFile(headerDict, footerDict, dataList):
                
         
         
-        copy.close
-    return
+        #copy.close
+    #return

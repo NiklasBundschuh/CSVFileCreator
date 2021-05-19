@@ -135,14 +135,14 @@ class HeaderParser:
             item = fileLine[currIdx]
             if item == ";":
                 if lastIdx < currIdx:
-                    values.append(fileLine[lastIdx:currIdx])
+                    values.append(int(fileLine[lastIdx:currIdx]))
 
                 lastIdx = currIdx +1
             currIdx += 1
                     
 
         if lastIdx < currIdx:
-            values.append(fileLine[lastIdx:currIdx])
+            values.append(int(fileLine[lastIdx:currIdx]))
         return values
 
 
@@ -164,7 +164,7 @@ class HeaderParser:
     def __adaptSKeyIndicies(self, sIdx):
         idx = 0
         while idx < len(self.__lastKeys):
-            self.__lastKeys[idx] = "S" + str(sIdx)
+            self.__lastKeys[idx] = "S{:02d}".format(sIdx)
             sIdx += 1
             idx += 1
 
