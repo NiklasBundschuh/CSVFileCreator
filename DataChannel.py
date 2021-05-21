@@ -21,6 +21,8 @@ class DataChannel:
     def data(self):
         return self.__data
 
+    def dataLength(self):
+        return len(self.__data)
 
     def setTitle(self, text):
         # set channel title

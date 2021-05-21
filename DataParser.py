@@ -61,7 +61,7 @@ class DataParser:
     # parse the Data Line
     def parseDataLine(self, fileline, dataList):
         #check if we can set the unit
-        if fileline == "[ms];1000":
+        if fileline.find("[") != -1:
             self.unitsplitter(fileline)
             return
       
@@ -106,6 +106,8 @@ class DataParser:
                 # add data-channel instance to data-list
                 dataChannel = DataChannel()
                 dataChannel.setTitle("Channel " + str(len(dataList)+1))
+                dataChannel.setUnit(self.__unit)
+                dataChannel.setUnitValue(self.__unitValue)
                 dataList.append(dataChannel)
             
             valueText = self.checkAndReplaceComma(valueText)
