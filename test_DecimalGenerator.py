@@ -4,11 +4,7 @@ from DecimalGenerator import DecimalGenerator
 
 
 class TestCSVWriter(unittest.TestCase):
-    #def __init__(self):
-        #self.dot = 0 
-        #self.comma = 1
-        
-
+    
     def test_Constructor(self):
         gen = DecimalGenerator()
         self.assertEqual(gen.getDelimiter(), 0)
@@ -24,6 +20,7 @@ class TestCSVWriter(unittest.TestCase):
         gen = DecimalGenerator()
         gen.setCommaDelimiter()
         self.assertEqual(gen.getDelimiter(), 1)
+        
 
 
     def test_generatePositiveDotDelimiter(self):

@@ -16,6 +16,7 @@ class HeaderGenerator:
 
     def generateCommonSection(self, hDict):
         sectionLines = []
+        
         return sectionLines
 
     def generateKSection(self, hDict):
@@ -25,7 +26,6 @@ class HeaderGenerator:
 
     def generateSSection(self, hDict):
         sectionLines = []
-
         startIdx = 0
         idx = 0
         while idx < 14:

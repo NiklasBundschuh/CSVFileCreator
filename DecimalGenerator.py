@@ -1,5 +1,3 @@
-
-import re
 from decimal import *
 
 class DecimalGenerator:
@@ -32,5 +30,9 @@ class DecimalGenerator:
             if pos != -1:
                 text = text[:pos] + "," + text[pos + 1:]
 
+        elif self.__delimiter == self.__CONST_DECIMAL_DELIMTER_DOT:
+            pos = text.find(",")
+            if pos != -1:
+                text = text[:pos] + "." + text[pos + 1:]
         return text
     

@@ -1,10 +1,24 @@
-
+from DataParser import DataParser
+from DecimalGenerator import DecimalGenerator
 class HeaderParser:
+    
+    # Header Information
+    Head_Key_Order = "Auftrag"
+    Head_Key_PrePressure = "Vordruck"
+    Head_Key_Furnace_Temp = "Ofentemp"
+    Head_Key_Part_Weight = "Gewicht"
 
-    def __init__(self):
-                                 
+    # Fotter Information
+    Foot_Key_Amount = "Menge[kg]"
+    Foot_Key_Order_Set = "AuftragSoll"
+    Foot_Key_Order_Cnt = "AuftragIst"
+    Foot_Key_Charge_Set = "ChargeSoll"
+    Foot_Key_Charge_Cnt = "ChargeIst"
+    Foot_Key_Cycle_Brutto = "ZyklusBrutto[sek]"
+    Foot_Key_Cycle_Netto = "ZyklusNetto[sek]"
+
+    def __init__(self):              
         # constructor
-        
         # constants
         self.__CONST_HEADER_STATE_KEY_VALUE = 0
         self.__CONST_HEADER_STATE_TABLE_KEY = 1
@@ -12,6 +26,7 @@ class HeaderParser:
         
         # properties
         self.reset()
+        return
 
     def reset(self):
         self.__tableState = self.__CONST_HEADER_STATE_KEY_VALUE
@@ -83,24 +98,114 @@ class HeaderParser:
     # split function from path
     def __parseHeaderKeyValueLine(self, fileLine, dict):
         key = ""
-        value = ""
+        values = []
         lastIdx = 0
         currIdx = 0
         while currIdx < len(fileLine):
             item = fileLine[currIdx]
             if item == ";":
                 if lastIdx < currIdx:
-                    key = fileLine[lastIdx:currIdx]
+                    if lastIdx == 0:
+                        key = fileLine[lastIdx:currIdx]
+                    else:
+                        values.append(fileLine[lastIdx:currIdx])
                     lastIdx = currIdx +1
-                    break
+                    
 
             currIdx += 1
 
-        if lastIdx > currIdx:
-            value=fileLine[lastIdx:]
+        if lastIdx < currIdx:
+            values.append(fileLine[lastIdx:currIdx])
+        idx = 0
+        while len(values) > idx:
+            if key == HeaderParser.Head_Key_Order:
+                values[idx] = int(values[idx])
+            elif key == HeaderParser.Head_Key_PrePressure:
+                values[idx] = float(DataParser.checkAndReplaceComma(self, values[idx]))
+            elif key == HeaderParser.Head_Key_Furnace_Temp:
+                values[idx] = int(values[idx])
+            elif key == HeaderParser.Head_Key_Part_Weight:
+                values[idx] = int(values[idx])
+        
+            
+            elif key == HeaderParser.Foot_Key_Amount:
+                values[idx] = int(values[idx])
+            elif key == HeaderParser.Foot_Key_Order_Set:
+                values[idx] = int(values[idx])
+            elif key == HeaderParser.Foot_Key_Order_Cnt:
+                values[idx] = int(values[idx])
+            elif key == HeaderParser.Foot_Key_Charge_Set:
+                values[idx] = int(values[idx])
+            #elif key == HeaderParser.Foot_Key_Charge_Cnt:
+                #values[idx] = int(values[idx])
+            elif key == HeaderParser.Foot_Key_Cycle_Brutto:
+                values[idx] = float(DataParser.checkAndReplaceComma(self, values[idx]))
+            elif key == HeaderParser.Foot_Key_Cycle_Netto:
+                values[idx] = float(DataParser.checkAndReplaceComma(self, values[idx]))
+               
 
-        dict[key] = value
+            dict[key] = values
+            idx += 1
+        
+        #if key in headFootInformation:
+            #value = self.__convertHeaderFootertoINT(value)
+        
+        # case statement regarding key content
+        #dict[key] = value
+        #return
+    
+    def __convertHeaderFootertoINT(self, value):
+        value = str(value)
+        posComma = value.find(",")
+        posDot = value.find(".")
+        posSemicolon = value.find(";")
 
+        if posSemicolon != -1:
+            valueList = value.split(";")
+            idx = 0
+            while len(valueList) > idx:
+                posComma = valueList[idx].find(",")
+                posDot = valueList[idx].find(".")
+                if posComma != -1:
+                    self.__deci = DecimalGenerator()
+                    self.__deci.setDotDelimiter()    
+                    valueList[idx] = self.__deci.generate(valueList[idx])
+                    valueList[idx] = float(valueList[idx])
+
+                elif posDot != -1:
+                    valueList[idx] = float(valueList[idx])
+
+                else:
+                    valueList[idx] = int(valueList[idx])
+                
+                value = ""
+                value += valueList[idx] + ";"
+                
+                
+                
+                idx += 1
+            return value
+            
+            
+
+
+
+        elif posComma != -1:
+            self.__deci = DecimalGenerator()
+            self.__deci.setDotDelimiter()    
+            value = self.__deci.generate(value)
+            value = float(value)
+            return value
+
+        elif posDot != 1:
+            value = float(value)
+            return value
+
+        else:
+            value = int(value)
+            return value
+        
+        
 
 
 
